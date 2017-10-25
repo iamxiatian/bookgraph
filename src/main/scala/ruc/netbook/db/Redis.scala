@@ -2,7 +2,7 @@ package nlp.db
 
 import akka.Done
 import akka.actor.CoordinatedShutdown
-import nlp.NlpConf
+import nlp.MyConf
 import redis.RedisClient
 
 import scala.concurrent.Future
@@ -38,8 +38,8 @@ trait Redis {
   val timeout = 5 seconds
 
   val redis = RedisClient(
-    NlpConf.getString("db.redis.host"),
-    NlpConf.getInt("db.redis.port"),
+    MyConf.getString("db.redis.host"),
+    MyConf.getInt("db.redis.port"),
     connectTimeout = Some(6 seconds)
   )
 

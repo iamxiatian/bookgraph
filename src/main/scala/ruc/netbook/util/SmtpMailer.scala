@@ -2,7 +2,7 @@ package nlp.util
 
 import javax.mail.internet.InternetAddress
 
-import nlp.NlpConf
+import nlp.MyConf
 import nlp.util.mail.Defaults._
 import nlp.util.mail._
 import org.slf4j.LoggerFactory
@@ -15,14 +15,14 @@ import scala.util.Success
 object SmtpMailer {
   val log = LoggerFactory.getLogger("SmtpMailer")
 
-  val host = NlpConf.getString("scheduler.mail.smtp.host")
-  val port = NlpConf.getInt("scheduler.mail.smtp.port")
-  val user = NlpConf.getString("scheduler.mail.smtp.user")
-  val password = NlpConf.getString("scheduler.mail.smtp.password")
-  val auth = NlpConf.getBoolean("scheduler.mail.smtp.auth")
-  val startTtls = NlpConf.getBoolean("scheduler.mail.smtp.startTtls")
+  val host = MyConf.getString("scheduler.mail.smtp.host")
+  val port = MyConf.getInt("scheduler.mail.smtp.port")
+  val user = MyConf.getString("scheduler.mail.smtp.user")
+  val password = MyConf.getString("scheduler.mail.smtp.password")
+  val auth = MyConf.getBoolean("scheduler.mail.smtp.auth")
+  val startTtls = MyConf.getBoolean("scheduler.mail.smtp.startTtls")
 
-  val receivers = NlpConf.getString("scheduler.mail.receivers").split(";")
+  val receivers = MyConf.getString("scheduler.mail.receivers").split(";")
     .filter(_.contains("@"))
     .map(new InternetAddress(_))
     .toList

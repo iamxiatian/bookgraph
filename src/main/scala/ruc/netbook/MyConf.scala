@@ -1,8 +1,6 @@
 package nlp
 
 import com.typesafe.config.ConfigFactory
-import org.zhinang.extract.ExtractorConf
-import org.zhinang.util.verhas.SafeService
 
 /**
   * NLP项目的配置
@@ -10,7 +8,7 @@ import org.zhinang.util.verhas.SafeService
   * @author Tian Xia
   *         Apr 20, 2017 1:31 AM
   */
-object NlpConf {
+object MyConf {
   //先采用my.conf中的配置，再使用application.conf中的默认配置
   lazy val config = ConfigFactory.parseFile(new java.io.File("conf/my.conf"))
     .withFallback(ConfigFactory.load())
@@ -20,14 +18,6 @@ object NlpConf {
   def getInt(key: String) = config.getInt(key)
 
   def getBoolean(path: String) = config.getBoolean(path)
-
-  val zhinangConf = ExtractorConf.create
-    .setBoolean("extractor.mining.sentiment", true)
-    .setInt("http.connection.timeout", 9000)
-    .setInt("http.socket.timeout", 10000)
-    .setBoolean("nlp.keyword.show.tf", false)
-    .setBoolean("nlp.keyword.hanlp", true)
-    .setInt("extractor.keywords.topN", 5)
 
   lazy val httpPort = getInt("http.port")
   lazy val mongoUrl = getString("db.mongo.url")
@@ -46,9 +36,6 @@ object NlpConf {
   lazy val mailNotify = getBoolean("scheduler.mail.notify") //是否启用邮件通知
 
   def printConf() = {
-    val msg = if (SafeService.check) "passed :-)" else "OOPS (:-\n"
-    println(msg)
-
     println(s"http server port ==> $httpPort")
 
     println("  scheduler config:")

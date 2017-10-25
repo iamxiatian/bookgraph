@@ -8,10 +8,12 @@ scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 //fork in run := true
 //cancelable in Global := true
 
+val akkaVersion = "2.5.6"
+
 //akka
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.0"
-libraryDependencies += "com.typesafe.akka" %% "akka-remote" % "2.5.0"
-libraryDependencies += "com.typesafe.akka" %% "akka-slf4j" % "2.5.0"
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % akkaVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-remote" % akkaVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.0.5"
 libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.5"
 libraryDependencies += "com.typesafe" % "config" % "1.3.1"
