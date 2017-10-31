@@ -41,14 +41,15 @@ object OutlineExtractor {
     * @param current
     * @return
     */
-  private def getOutlineItems(current: PDOutlineItem): List[PDOutlineItem] = {
+  def getOutlineItems(current: PDOutlineItem): List[PDOutlineItem] = {
     if (current == null)
       List.empty[PDOutlineItem]
     else
       current :: getOutlineItems(current.getNextSibling)
   }.filter(p => p.getDestination.isInstanceOf[PDPageDestination])
 
-  private def convertItems(document: PDDocument,
+
+  def convertItems(document: PDDocument,
                            items: List[PDOutlineItem]
                           ): List[ContentItem] = items match {
     case first :: second :: rest =>
@@ -92,7 +93,8 @@ object OutlineExtractor {
       docInfo.getKeywords,
       docInfo.getCreationDate.getTime)
 
-
+    val firstNode = outline.getFirstChild
+    println(firstNode)
     val rawItems = getOutlineItems(outline.getFirstChild)
     val contentItems = convertItems(document, rawItems)
 
