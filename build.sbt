@@ -53,7 +53,7 @@ libraryDependencies += "com.github.etaty" %% "rediscala" % "1.8.0"
 libraryDependencies +=  "org.reactivemongo" %% "reactivemongo" % "0.12.6"
 
 // PDF library
-libraryDependencies += "org.apache.pdfbox" % "pdfbox" % "2.0.7"
+libraryDependencies += "org.apache.pdfbox" % "pdfbox" % "2.0.8"
 
 //Java mail
 libraryDependencies += "javax.mail" % "mail"  % "1.4.7"
@@ -99,3 +99,14 @@ javaOptions in Universal ++= Seq(
   "-J-Xms4G",
   "-J-Xmx8G"
 )
+
+initialCommands in console +=
+  """
+    |import java.io.File
+    |import java.util.Date
+    |
+    |import org.apache.pdfbox.pdmodel.PDDocument
+    |import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination
+    |import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem
+    |import ruc.netbook.ebook._
+  """.stripMargin

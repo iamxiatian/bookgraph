@@ -26,3 +26,14 @@
 ```
 
 此时，即启动了nlp服务，可以直接使用其中的舆情画像服务了。
+
+参考资料
+=============================
+
+PDF
+-----------------------------
+### Document Structure
+In this chapter, we leave behind the bits and bytes of the PDF file, and consider the logical structure. We consider the trailer dictionary, document catalog, and page tree. We enumerate the required entries in each object. We then look at two common structures in PDF files: text strings and dates.
+
+https://www.safaribooksonline.com/library/view/pdf-explained/9781449321581/ch04.html
+
