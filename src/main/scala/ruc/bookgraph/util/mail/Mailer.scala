@@ -1,4 +1,4 @@
-package nlp.util.mail
+package ruc.bookgraph.util.mail
 
 import javax.mail.internet.MimeMessage
 import javax.mail.{Message, Transport, Session => MailSession}

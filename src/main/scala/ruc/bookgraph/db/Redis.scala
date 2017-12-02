@@ -1,4 +1,4 @@
-package nlp.db
+package ruc.bookgraph.db
 
 import akka.Done
 import akka.actor.CoordinatedShutdown

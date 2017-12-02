@@ -1,4 +1,4 @@
-package nlp.lexical
+package ruc.bookgraph.lexical
 
 import com.hankcs.hanlp.HanLP
 import com.hankcs.hanlp.dictionary.CustomDictionary

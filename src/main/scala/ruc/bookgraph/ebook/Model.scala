@@ -1,4 +1,4 @@
-package ruc.netbook.ebook
+package ruc.bookgraph.ebook
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer

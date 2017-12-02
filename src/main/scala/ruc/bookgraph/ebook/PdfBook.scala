@@ -1,4 +1,4 @@
-package ruc.netbook.ebook
+package ruc.bookgraph.ebook
 
 import java.io.File
 
@@ -16,6 +16,9 @@ import scala.collection.mutable
   * @param pdfFile
   */
 class PdfBook(pdfFile: File) {
+  /** 通过文件名称实例化PDF电子书 */
+  def this(pdfFileName: String) = this(new File(pdfFileName))
+
   val document: PDDocument = PDDocument.load(pdfFile)
 
   val catalog = document.getDocumentCatalog

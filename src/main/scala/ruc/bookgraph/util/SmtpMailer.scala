@@ -1,12 +1,12 @@
-package nlp.util
+package ruc.bookgraph.util
 
 import javax.mail.internet.InternetAddress
 
 import nlp.MyConf
-import nlp.util.mail.Defaults._
-import nlp.util.mail._
 import org.slf4j.LoggerFactory
+import ruc.bookgraph.util.mail.{Envelope, Mailer, Multipart}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.Success
 
 /**

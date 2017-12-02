@@ -1,4 +1,4 @@
-package nlp.util.mail
+package ruc.bookgraph.util.mail
 
 import java.nio.charset.Charset
 import javax.mail.internet.InternetAddress

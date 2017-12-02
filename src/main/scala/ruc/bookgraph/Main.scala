@@ -1,7 +1,8 @@
-package nlp
+package ruc.bookgraph
 
 import akka.actor.ActorSystem
-import nlp.api.HttpApiServer
+import nlp.MyConf
+import ruc.bookgraph.api.HttpApiServer
 
 /**
   * 主程序，用于运行服务，显示结果

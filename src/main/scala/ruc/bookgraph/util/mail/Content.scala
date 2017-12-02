@@ -1,4 +1,4 @@
-package nlp.util.mail
+package ruc.bookgraph.util.mail
 
 import java.io.File
 import java.nio.charset.Charset

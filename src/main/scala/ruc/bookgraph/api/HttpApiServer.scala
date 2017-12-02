@@ -1,4 +1,4 @@
-package nlp.api
+package ruc.bookgraph.api
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
@@ -8,7 +8,8 @@ import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
-import nlp.lexical.Segment
+import ruc.bookgraph.lexical.Segment
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.duration._
 

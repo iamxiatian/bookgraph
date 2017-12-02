@@ -1,5 +1,5 @@
 organization := "ruc"
-name					:= "netbook"
+name					:= "bookgraph"
 version := "1.0"
 
 scalaVersion  := "2.12.1"
@@ -108,5 +108,5 @@ initialCommands in console +=
     |import org.apache.pdfbox.pdmodel.PDDocument
     |import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination
     |import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem
-    |import ruc.netbook.ebook._
+    |import ruc.bookgraph.ebook._
   """.stripMargin

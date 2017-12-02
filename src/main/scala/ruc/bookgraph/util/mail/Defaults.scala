@@ -1,4 +1,4 @@
-package nlp.util.mail
+package ruc.bookgraph.util.mail
 
 import java.util.Properties
 import javax.mail.{Session => MailSession}

@@ -1,4 +1,4 @@
-package nlp.api
+package ruc.bookgraph.api
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import spray.json._
