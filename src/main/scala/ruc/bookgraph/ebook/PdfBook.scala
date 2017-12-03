@@ -3,9 +3,12 @@ package ruc.bookgraph.ebook
 import java.io.File
 
 import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.pdmodel.PDDestinationNameTreeNode
+
 import org.apache.pdfbox.pdmodel.interactive.action.PDActionGoTo
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.{PDNamedDestination, PDPageDestination}
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -15,13 +18,19 @@ import scala.collection.mutable
   *
   * @param pdfFile
   */
-class PdfBook(pdfFile: File) {
+class PdfBook(pdfFile: File) extends AutoCloseable {
   /** 通过文件名称实例化PDF电子书 */
   def this(pdfFileName: String) = this(new File(pdfFileName))
 
   val document: PDDocument = PDDocument.load(pdfFile)
 
   val catalog = document.getDocumentCatalog
+
+  import org.apache.pdfbox.pdmodel.PDDocumentNameDictionary
+
+  val namesDict: PDDocumentNameDictionary = catalog.getNames
+
+  val destsTree = namesDict.getDests
 
   val outline = catalog.getDocumentOutline
 
@@ -35,7 +44,7 @@ class PdfBook(pdfFile: File) {
   val subject = docInfo.getSubject
   val author = docInfo.getAuthor
   val keywords = docInfo.getKeywords
-  val creationDate = docInfo.getCreationDate.getTime
+  val creationDate = docInfo.getCreationDate
 
   val nodeOnes = fixNavTree(buildNavTree(None, outline.children().asScala.toList, 1))
 
@@ -47,12 +56,22 @@ class PdfBook(pdfFile: File) {
     * @param item
     * @return
     */
-  def retrievePageNumber(item: PDOutlineItem): Int = {
+  def retrievePageNumber(item: PDOutlineItem): (Int, Option[String]) = {
     val goto = item.getAction
     val actionGoTo = goto.asInstanceOf[PDActionGoTo]
-    val pd = actionGoTo.getDestination.asInstanceOf[PDPageDestination]
 
-    pd.retrievePageNumber()
+    val destination = actionGoTo.getDestination
+    if (destination.isInstanceOf[PDNamedDestination]) {
+      val namedDest = destination.asInstanceOf[PDNamedDestination]
+      val pageDestination = destsTree.getValue(namedDest.getNamedDestination)
+      val refName = namedDest.getNamedDestination
+
+      (pageDestination.retrievePageNumber(), Some(refName))
+    } else {
+      val n = destination.asInstanceOf[PDPageDestination].retrievePageNumber()
+      println(item.getTitle + "  -- " + n)
+      (n, None)
+    }
   }
 
   def getText(startPage: Int, endPage: Int): String = {
@@ -79,33 +98,44 @@ class PdfBook(pdfFile: File) {
     items.map {
       item: PDOutlineItem =>
         val title = item.getTitle.replaceAll("\n", " ")
-        val startPage = retrievePageNumber(item)
+        val (startPage, startRefName) = retrievePageNumber(item)
 
-        val endPage = if (item.getNextSibling != null)
+        val (endPage, _) = if (item.getNextSibling != null)
           retrievePageNumber(item.getNextSibling)
         else
-          -1
+          (-1, None)
 
         //如果还有子节点，则把子节点连接起来
         val childItems = item.children().asScala.toList
 
-        val node = NavNode(title, depth, startPage, endPage, parent)
+        val node = NavNode(title, startRefName, depth, startPage, endPage, parent)
 
         if (childItems.nonEmpty) {
-          NavNode(title, depth, startPage, endPage, parent,
+          NavNode(title, startRefName, depth, startPage, endPage, parent,
             buildNavTree(Some(node), item.children().asScala.toList, depth + 1)
           )
         } else {
-          NavNode(title, depth, startPage, endPage, parent)
+          NavNode(title, startRefName, depth, startPage, endPage, parent)
         }
     }
 
+  /**
+    * 补充页码数据，同时，如果第一级目录的数量为1，则直接返回第二级目录，作为nodeOnes
+    * @param nodes
+    * @return
+    */
   private def fixNavTree(nodes: List[NavNode]): List[NavNode] = {
+    // 是否要删除de
+    val removeTopNode = (nodes.size == 1 && nodes(0).children.size>1)
+
     //按层次遍历树，把endPage为-1的页码调整正确
     val queue = mutable.Queue.empty[NavNode]
     queue.enqueue(nodes: _*)
     while (!queue.isEmpty) {
       val node = queue.dequeue()
+
+      if(removeTopNode) node.depth = node.depth -1
+
       if (node.endPage == -1 && node.parent.isEmpty) {
         node.endPage = pageCount
       } else if (node.endPage == -1 && node.parent.nonEmpty) {
@@ -114,7 +144,10 @@ class PdfBook(pdfFile: File) {
       queue.enqueue(node.children: _*)
     }
 
-    nodes
+    if(removeTopNode) nodes(0).children else nodes
   }
 
+  override def close(): Unit = {
+    document.close()
+  }
 }
